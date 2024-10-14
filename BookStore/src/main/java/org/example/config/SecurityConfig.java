@@ -35,7 +35,7 @@ public class SecurityConfig {
     @Bean
     public UserAuthenticationFilter userAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtils jwtUtils) {
         UserAuthenticationFilter filter = new UserAuthenticationFilter(jwtUtils);
-        filter.setRequiresAuthenticationRequestMatcher(AntPathRequestMatcher.antMatcher(POST, "/api/v1.0/login"));
+        filter.setRequiresAuthenticationRequestMatcher(AntPathRequestMatcher.antMatcher(POST, "/login"));
         filter.setAuthenticationManager(authenticationManager);
         return filter;
     }
@@ -49,14 +49,20 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, UserDetailsService userDetailsService,
                                            UserAuthenticationFilter filter, JWTUtils jwtUtils) throws Exception {
 
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/").permitAll()
+        httpSecurity.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/register", "/a/css/**", "/a/script/**").permitAll()
                         .anyRequest().authenticated())
+                .formLogin(customizer -> customizer
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/main_store_book", true)
+                        .permitAll())
                 .addFilter(filter)
                 .addFilterAfter(new JWTRequestFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(userDetailsService);
 
         return httpSecurity.build();
     }
+
+
 }

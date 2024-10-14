@@ -6,7 +6,7 @@ i18next
             en: {
                 translation: {
                     "title": "Login",
-                    "emailPlaceholder": "Email",
+                    "emailPlaceholder": "Login",
                     "passwordPlaceholder": "Password",
                     "submitButton": "Log in"
                 }
@@ -14,7 +14,7 @@ i18next
             ru: {
                 translation: {
                     "title": "Вход",
-                    "emailPlaceholder": "Почта",
+                    "emailPlaceholder": "Логин",
                     "passwordPlaceholder": "Пароль",
                     "submitButton": "Войти"
                 }
@@ -32,7 +32,7 @@ i18next
 
 function updateContent() {
     document.getElementById('title-entry').textContent = i18next.t('title');
-    document.getElementById('emailLogin').placeholder = i18next.t('emailPlaceholder');
+    document.getElementById('usernameLogin').placeholder = i18next.t('emailPlaceholder');
     document.getElementById('passwordLogin').placeholder = i18next.t('passwordPlaceholder');
     document.getElementById('submitButton').textContent = i18next.t('submitButton');
 }
