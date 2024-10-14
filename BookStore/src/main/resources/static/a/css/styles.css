@@ -1,0 +1,77 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.entryForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.entryDiv {
+    padding: 20px;
+    background-color: wheat;
+    width: 30%;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input[type="email"], input[type="password"], button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 400ms;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.language-toggle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+@media (max-width: 1200px) {
+    .entryDiv {
+        width: 40%;
+    }
+}
+
+@media (max-width: 768px) {
+    .entryDiv {
+        width: 50%;
+    }
+}
+
+@media (max-width: 480px) {
+    .entryDiv {
+        width: 70%;
+    }
+}

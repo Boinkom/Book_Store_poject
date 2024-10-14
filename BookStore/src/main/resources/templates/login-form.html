@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title id="title-entry">Вход</title>
+  <link rel="icon" href="/a/image/8172.png" type="image/x-icon">
+  <script src="https://unpkg.com/i18next/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="/a/script/languageChangeLogin.js"></script>
+  <link href="/a/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="language-toggle" onclick="toggleLanguage()">Ru / En</div>
+<form method="post" action="/main_store_book" class="entryForm">
+  <div class="entryDiv">
+    <input type="email" placeholder="Почта" id="emailLogin" required>
+    <input type="password" placeholder="Пароль" id="passwordLogin" required>
+    <button type="submit" id="submitButton">Войти</button>
+  </div>
+</form>
+</body>
+</html>

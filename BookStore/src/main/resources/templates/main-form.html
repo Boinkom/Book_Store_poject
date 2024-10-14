@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/a/image/8172.png" type="image/x-icon">
+    <title id="main-title">Магазин книг</title>
+    <script src="https://unpkg.com/i18next/i18next.min.js"></script>
+    <script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js"></script>
+    <script src="/a/script/languageChangeMain.js"></script>
+    <link href="/a/css/styles-card.css" rel="stylesheet">
+</head>
+<body>
+<div class="language-toggle" onclick="toggleLanguage()">Ru / En</div>
+<div class="main-form">
+    <div id="card" th:each="book: ${books}">
+        <img th:src="${book.img}" th:alt="${book.title}">
+        <div class="card-info">
+            <p id="text-price" th:text="${book.price}"></p>
+            <p th:text="${book.title}"></p>
+            <p th:text="${book.author}"></p>
+            <p th:text="${book.genres}"></p>
+        </div>
+        <a class="add-to-cart href-main" th:href="@{'/add-trash/' + ${book.id}}">В корзину</a>
+    </div>
+</div>
+</body>
+</html>
