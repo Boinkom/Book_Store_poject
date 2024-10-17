@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="title-reg">Регистрация</title>
+    <link href="/a/css/styles-reg.css" rel="stylesheet">
+    <script src="https://unpkg.com/i18next/i18next.min.js"></script>
+    <script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js"></script>
+    <script src="/a/script/languageChangeReg.js"></script>
+    <link href="/a/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="language-toggle" onclick="toggleLanguage()">Ru / En</div>
+<form id="registrationForm" method="post" action="/register-user">
+    <div id="regDiv">
+        <input type="text" name="username" placeholder="Логин" id="usernameReg" required>
+        <input type="email" name="email" placeholder="Email" id="emailReg" required>
+        <input type="password" name="password" placeholder="Пароль" id="passwordReg1" required>
+        <input type="password" name="passwordConfirm" placeholder="Повторите пароль" id="passwordReg2" required>
+        <button type="submit" id="RegButton">Зарегистрироваться</button>
+    </div>
+</form>
+
+<script>
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        const password1 = document.getElementById('passwordReg1').value;
+        const password2 = document.getElementById('passwordReg2').value;
+
+        if (password1 !== password2) {
+            alert('Пароли не совпадают');
+            event.preventDefault();
+            return;
+        }
+
+
+        this.submit();
+    });
+</script>
+
+</body>
+</html>

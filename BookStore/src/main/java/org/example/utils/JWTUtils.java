@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JWTUtils {
 
-    @Value("{app.jwt.secret-key}")
+    @Value("${app.jwt.secret-key}")
     private String secret;
 
     @Value("${app.jwt.expiration-time.access-token}")
@@ -34,7 +34,6 @@ public class JWTUtils {
     private static final String PERMISSIONS_CLAIMS = "permissions";
 
     private final Clock clock;
-
 
     public String generateAccessToken(UserDetailsEntity user) {
         return JWT.create()
@@ -50,7 +49,16 @@ public class JWTUtils {
         return new PreAuthenticatedAuthenticationToken(user, null, user.getAuthorities());
     }
 
-    private DecodedJWT validateToken(String token) {
+    public boolean isValidToken(String token) {
+        try {
+            validateToken(token);
+            return true;
+        } catch (JWTVerificationException e) {
+            return false;
+        }
+    }
+
+    public DecodedJWT validateToken(String token) {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret.getBytes())).build();
         return verifier.verify(token);
     }
@@ -70,6 +78,4 @@ public class JWTUtils {
 
         return new UserDetailsEntity(username, null, new HashSet<>(authorities));
     }
-
-
 }

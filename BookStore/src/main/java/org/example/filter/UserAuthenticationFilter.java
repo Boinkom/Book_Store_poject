@@ -1,8 +1,8 @@
     package org.example.filter;
-
     import com.fasterxml.jackson.databind.ObjectMapper;
     import jakarta.servlet.FilterChain;
     import jakarta.servlet.ServletInputStream;
+    import jakarta.servlet.http.Cookie;
     import jakarta.servlet.http.HttpServletRequest;
     import jakarta.servlet.http.HttpServletResponse;
     import lombok.RequiredArgsConstructor;
@@ -16,6 +16,7 @@
     import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
     import java.io.IOException;
+    import java.time.Duration;
     import java.util.HashMap;
     import java.util.Map;
 
@@ -48,18 +49,22 @@
 
         @Override
         protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                                FilterChain filterChain, Authentication authentication) throws IOException {
-            UserDetailsEntity user = (UserDetailsEntity) authentication.getPrincipal();
+                                                FilterChain chain, Authentication authResult) throws IOException {
 
-            String accessToken = jwtUtils.generateAccessToken(user);
+            String jwtToken = jwtUtils.generateAccessToken((UserDetailsEntity) authResult.getPrincipal());
 
-            Map<String, String> token = new HashMap<>();
-            token.put("access_token", accessToken);
 
-            response.setContentType(APPLICATION_JSON_VALUE);
-            new ObjectMapper().writeValue(response.getOutputStream(), token);
+            Cookie jwtCookie = new Cookie("access_token", jwtToken);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);
+            jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(24 * 60 * 60);
+
+            response.addCookie(jwtCookie);
+
+
+            response.sendRedirect("/main-form");
         }
-
 
         @Override
         protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {

@@ -1,17 +1,21 @@
+/* Общие настройки */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* Основной стиль для body */
 body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column; /* Делаем элементы на странице вертикальными */
     height: 100vh;
     background-color: #f0f0f0;
 }
 
+/* Стиль для формы входа */
 .entryForm {
     display: flex;
     justify-content: center;
@@ -19,6 +23,7 @@ body {
     width: 100%;
 }
 
+/* Стиль для контейнера с формой */
 .entryDiv {
     padding: 20px;
     background-color: wheat;
@@ -30,6 +35,7 @@ body {
     gap: 10px;
 }
 
+/* Стиль для полей ввода и кнопки */
 input[type="text"], input[type="password"], button {
     width: 100%;
     padding: 10px;
@@ -37,6 +43,7 @@ input[type="text"], input[type="password"], button {
     border-radius: 3px;
 }
 
+/* Стиль для кнопки */
 button {
     background-color: #4CAF50;
     color: white;
@@ -45,10 +52,12 @@ button {
     transition: background-color 400ms;
 }
 
+/* Эффект при наведении на кнопку */
 button:hover {
     background-color: #45a049;
 }
 
+/* Стиль для переключения языка */
 .language-toggle {
     position: absolute;
     top: 10px;
@@ -58,6 +67,22 @@ button:hover {
     font-weight: bold;
 }
 
+/* Стиль для ссылки на регистрацию */
+#registrationHref {
+    margin-top: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #4CAF50; /* Зеленый цвет для текста */
+    font-weight: bold;
+    transition: color 400ms;
+}
+
+/* Эффект при наведении на ссылку */
+#registrationHref:hover {
+    color: #45a049; /* Более темный оттенок зеленого при наведении */
+}
+
+/* Медиа-запросы для адаптации под разные экраны */
 @media (max-width: 1200px) {
     .entryDiv {
         width: 40%;

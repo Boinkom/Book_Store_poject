@@ -19,7 +19,7 @@ public class UserStorage {
     public UserStorage(BCryptPasswordEncoder bCryptPasswordEncoder, Map<String, User> userMap) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userMap = userMap;
-        this.userMap.put("admin", new User("admin", bCryptPasswordEncoder.encode("123"), List.of("ADMIN")));
+        this.userMap.put("admin", new User("1","admin", bCryptPasswordEncoder.encode("123"),"admin@admin", List.of("ADMIN")));
     }
 
     public User findUserByName(String username) {

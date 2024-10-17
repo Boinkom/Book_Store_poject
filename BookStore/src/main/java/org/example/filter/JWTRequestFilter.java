@@ -1,27 +1,20 @@
 package org.example.filter;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.utils.JWTUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
-import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,27 +23,39 @@ public class JWTRequestFilter extends OncePerRequestFilter {
     private final JWTUtils jwtUtils;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
-        BearerTokenResolver bearerTokenResolver = new DefaultBearerTokenResolver();
-        String token = bearerTokenResolver.resolve(request);
-        if (token != null) {
-            try {
-                PreAuthenticatedAuthenticationToken principal = jwtUtils.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(principal);
-            } catch (JWTVerificationException e) {
-                log.error("invalid token", e);
-                response.setStatus(FORBIDDEN.value());
-                Map<String, String> error = new HashMap<>();
-                error.put("error_message", e.getMessage());
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
-            }
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+        String token = null;
 
+        String requestURI = request.getRequestURI();
+        if (requestURI.startsWith("/a/css/") || requestURI.startsWith("/a/script/") || requestURI.startsWith("/a/image/") || "/".equals(requestURI) || "/register".equals(requestURI) || "/register-user".equals(requestURI)) {
+            chain.doFilter(request, response);
+            return;
         }
 
-        filterChain.doFilter(request, response);
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("access_token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
 
+        if (token != null) {
+           try {
+                DecodedJWT decodedJWT = jwtUtils.validateToken(token);
+               PreAuthenticatedAuthenticationToken authentication = jwtUtils.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+           } catch (JWTVerificationException e) {
+
+                log.error("Invalid JWT token: {}", e.getMessage());
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.getWriter().write("{\"error\": \"Invalid JWT token\"}");
+               return;
+          }
+       }
+
+        chain.doFilter(request, response);
     }
 }
