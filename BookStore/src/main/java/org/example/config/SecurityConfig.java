@@ -49,7 +49,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, UserDetailsService userDetailsService,
                                            UserAuthenticationFilter filter, JWTUtils jwtUtils) throws Exception {
 
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .requiresChannel(channel -> channel
+                        .anyRequest().requiresSecure()
+                )
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/login", "/a/**", "/register","/register-user").permitAll()
                         .anyRequest().authenticated())
